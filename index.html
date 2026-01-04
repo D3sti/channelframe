@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <title>ChannelFrame | Orchestrate every channel</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="ChannelFrame is the framework for orchestrating every channel with a unified channel graph, governance, observability, connectors, and automation.">
+  <meta name="description" content="ChannelFrame is an early exploration of orchestrating every channel, focused on governance, observability, connectors, and automation within a shared frame.">
   <meta name="theme-color" content="#07060b">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -292,10 +292,6 @@
       color: var(--text);
     }
 
-    .nav-cta {
-      display: none;
-    }
-
     .nav-toggle {
       width: 44px;
       height: 44px;
@@ -365,45 +361,6 @@
       margin: 24px 0;
     }
 
-    .hero-proof {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .avatar-stack {
-      display: flex;
-      align-items: center;
-    }
-
-    .avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 999px;
-      border: 2px solid #0c0b11;
-      margin-left: -10px;
-      background: linear-gradient(130deg, var(--a1), var(--a2));
-      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
-    }
-
-    .avatar:first-child {
-      margin-left: 0;
-    }
-
-    .avatar.a2 {
-      background: linear-gradient(130deg, var(--a2), var(--a4));
-    }
-
-    .avatar.a3 {
-      background: linear-gradient(130deg, var(--a4), var(--a3));
-    }
-
-    .avatar.a4 {
-      background: linear-gradient(130deg, var(--a1), var(--a3));
-    }
-
     .hero-visual .graph-card {
       padding: 24px;
       border-radius: var(--radius);
@@ -454,7 +411,14 @@
       stroke: url(#lineGradient);
       stroke-width: 2.5;
       fill: none;
-      opacity: 0.7;
+      opacity: 0.65;
+      stroke-dasharray: 6 12;
+      animation: flow 8s linear infinite;
+    }
+
+    .graph-line.slow {
+      animation-duration: 12s;
+      opacity: 0.45;
     }
 
     .node {
@@ -486,13 +450,19 @@
         opacity: 1;
       }
     }
+
+    @keyframes flow {
+      from {
+        stroke-dashoffset: 0;
+      }
+      to {
+        stroke-dashoffset: -36;
+      }
+    }
     .features-grid,
     .use-cases-grid,
     .benefits-grid,
-    .testimonials-grid,
-    .comparison-grid,
-    .ai-grid,
-    .pricing-grid {
+    .ai-grid {
       display: grid;
       gap: 24px;
     }
@@ -535,43 +505,6 @@
       margin-top: 2px;
     }
 
-    .testimonial-card {
-      position: relative;
-    }
-
-    .stars {
-      display: inline-flex;
-      gap: 4px;
-      margin-bottom: 12px;
-    }
-
-    .comparison-card {
-      padding: 28px;
-    }
-
-    .comparison-card h3 {
-      margin-bottom: 12px;
-    }
-
-    .comparison-card ul {
-      list-style: none;
-      display: grid;
-      gap: 10px;
-      color: var(--muted);
-    }
-
-    .comparison-card ul li::before {
-      content: "+";
-      margin-right: 8px;
-      color: var(--a2);
-      font-weight: 700;
-    }
-
-    .comparison-card.other ul li::before {
-      content: "-";
-      color: var(--a3);
-    }
-
     .chip-row {
       display: flex;
       flex-wrap: wrap;
@@ -585,74 +518,6 @@
       background: rgba(71,165,236,0.16);
       border: 1px solid rgba(71,165,236,0.35);
       font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .pricing-toggle {
-      display: inline-flex;
-      gap: 8px;
-      padding: 6px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--stroke);
-      margin-bottom: 24px;
-    }
-
-    .toggle-btn {
-      padding: 8px 16px;
-      border-radius: 999px;
-      font-weight: 600;
-      color: var(--muted);
-    }
-
-    .toggle-btn.is-active {
-      background: linear-gradient(120deg, var(--a1), var(--a2));
-      color: #0a0a0f;
-    }
-
-    .pricing-card .price-wrap {
-      display: flex;
-      align-items: baseline;
-      gap: 8px;
-      margin: 16px 0;
-    }
-
-    .pricing-card .price {
-      font-size: 2.4rem;
-      font-weight: 700;
-      font-family: "Space Grotesk", sans-serif;
-    }
-
-    .pricing-card ul {
-      list-style: none;
-      display: grid;
-      gap: 10px;
-      color: var(--muted);
-    }
-
-    .pricing-card ul li::before {
-      content: "\2713";
-      margin-right: 8px;
-      color: var(--a2);
-      font-weight: 700;
-    }
-
-    .pricing-card.highlight {
-      border: 1px solid rgba(160,87,238,0.6);
-      box-shadow: 0 30px 80px rgba(160,87,238,0.25);
-      position: relative;
-    }
-
-    .pricing-card.highlight::before {
-      content: "Most Popular";
-      position: absolute;
-      top: -14px;
-      right: 20px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: rgba(160,87,238,0.3);
-      border: 1px solid rgba(160,87,238,0.5);
-      font-size: 0.75rem;
       font-weight: 600;
     }
     .faq-item {
@@ -791,13 +656,7 @@
       .features-grid,
       .use-cases-grid,
       .benefits-grid,
-      .testimonials-grid,
-      .ai-grid,
-      .pricing-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .comparison-grid {
+      .ai-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
@@ -812,10 +671,6 @@
         display: flex;
       }
 
-      .nav-cta {
-        display: block;
-      }
-
       .nav-toggle {
         display: none;
       }
@@ -827,9 +682,7 @@
       .features-grid,
       .use-cases-grid,
       .benefits-grid,
-      .testimonials-grid,
-      .ai-grid,
-      .pricing-grid {
+      .ai-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
@@ -860,15 +713,11 @@
     <div class="container nav-inner">
       <a class="logo" href="#top">ChannelFrame</a>
       <nav class="nav-links" aria-label="Primary">
-        <a href="#features">Features</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#use-cases">Use Cases</a>
+        <a href="#features">Themes</a>
+        <a href="#use-cases">Scenarios</a>
         <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
       </nav>
-      <div class="nav-cta">
-        <a class="btn ghost" href="#pricing">Get Started</a>
-      </div>
       <button class="nav-toggle" aria-expanded="false" aria-controls="mobile-menu">
         <span></span>
         <span></span>
@@ -877,12 +726,10 @@
       </button>
     </div>
     <div class="mobile-menu" id="mobile-menu">
-      <a href="#features">Features</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#use-cases">Use Cases</a>
+      <a href="#features">Themes</a>
+      <a href="#use-cases">Scenarios</a>
       <a href="#faq">FAQ</a>
       <a href="#contact">Contact</a>
-      <a class="btn primary" href="#pricing">Get Started</a>
     </div>
   </header>
 
@@ -898,27 +745,18 @@
             ChannelFrame explores how these channels can be structured and aligned within a single coherent frame.
           </p>
           <p class="hero-sub muted">
-            Unify governance, observability, connectors, and automation inside one channel graph so every team moves together.
+            Exploring how governance, observability, connectors, and automation could align inside a shared orchestration frame.
           </p>
           <div class="hero-actions">
-            <a class="btn primary" href="#pricing">Get Started</a>
-            <a class="btn secondary" href="#contact">Book a Demo</a>
-          </div>
-          <div class="hero-proof">
-            <div class="avatar-stack" aria-hidden="true">
-              <span class="avatar"></span>
-              <span class="avatar a2"></span>
-              <span class="avatar a3"></span>
-              <span class="avatar a4"></span>
-            </div>
-            <span>Join 10,000+ builders orchestrating channels in weeks, not quarters.</span>
+            <a class="btn primary" href="#features">Explore themes</a>
+            <a class="btn secondary" href="#contact">Share a perspective</a>
           </div>
         </div>
         <div class="hero-visual reveal">
           <div class="graph-card">
             <div class="graph-header">
-              <span class="graph-title">Channel Graph</span>
-              <span class="graph-pill">Live</span>
+              <span class="graph-title">Speculative Neural Mesh</span>
+              <span class="graph-pill">Exploration</span>
             </div>
             <svg viewBox="0 0 420 260" aria-hidden="true">
               <defs>
@@ -927,18 +765,24 @@
                   <stop offset="100%" stop-color="#47A5EC" />
                 </linearGradient>
               </defs>
-              <path class="graph-line" d="M40 40 C120 30, 140 140, 220 130" />
-              <path class="graph-line" d="M220 130 C270 120, 320 190, 380 170" />
-              <path class="graph-line" d="M100 200 C170 170, 210 200, 280 220" />
-              <circle class="node" cx="40" cy="40" r="8" />
-              <circle class="node alt" cx="220" cy="130" r="10" />
-              <circle class="node" cx="380" cy="170" r="7" />
-              <circle class="node hot" cx="100" cy="200" r="9" />
-              <circle class="node alt" cx="280" cy="220" r="8" />
-              <circle class="node" cx="160" cy="80" r="6" />
-              <circle class="node hot" cx="300" cy="70" r="7" />
+              <path class="graph-line" d="M30 60 C80 20, 140 40, 180 80" />
+              <path class="graph-line slow" d="M180 80 C230 120, 280 90, 340 120" />
+              <path class="graph-line" d="M60 170 C120 140, 180 160, 240 190" />
+              <path class="graph-line slow" d="M240 190 C290 210, 340 200, 380 230" />
+              <path class="graph-line" d="M120 40 C150 90, 210 70, 250 40" />
+              <path class="graph-line" d="M90 210 C140 200, 200 230, 260 220" />
+              <circle class="node" cx="30" cy="60" r="7" />
+              <circle class="node alt" cx="180" cy="80" r="9" />
+              <circle class="node" cx="340" cy="120" r="7" />
+              <circle class="node hot" cx="60" cy="170" r="8" />
+              <circle class="node alt" cx="240" cy="190" r="8" />
+              <circle class="node" cx="120" cy="40" r="6" />
+              <circle class="node hot" cx="250" cy="40" r="7" />
+              <circle class="node alt" cx="380" cy="230" r="6" />
+              <circle class="node" cx="200" cy="210" r="6" />
+              <circle class="node hot" cx="150" cy="120" r="5" />
             </svg>
-            <div class="graph-footer">Governance and observability synced across 18 channels.</div>
+            <div class="graph-footer">Conceptual visualization only.</div>
           </div>
         </div>
       </div>
@@ -947,14 +791,14 @@
     <section class="section" id="features">
       <div class="container">
         <div class="section-header reveal">
-          <span class="eyebrow">Feature Highlights</span>
-          <h2>ChannelFrame highlights the work that matters</h2>
-          <p class="muted">Everything you need to orchestrate channels with clarity, governance, and automation from day one.</p>
+          <span class="eyebrow">Exploration themes</span>
+          <h2>Exploring how channels could stay aligned</h2>
+          <p class="muted">A snapshot of the ideas we are mapping across orchestration, governance, observability, connectors, and automation.</p>
         </div>
         <div class="features-grid">
           <article class="card feature-card reveal">
-            <h3>Channel Graph</h3>
-            <p class="muted">Map every touchpoint, dependency, and policy into a living channel graph that updates in real time.</p>
+            <h3>Signal topology</h3>
+            <p class="muted">Exploring ways to model channels and dependencies as a living topology without assuming a final shape.</p>
             <div class="mock">
               <svg viewBox="0 0 320 120" aria-hidden="true">
                 <rect x="10" y="18" width="90" height="18" rx="6" fill="rgba(71,165,236,0.35)" />
@@ -966,8 +810,8 @@
             </div>
           </article>
           <article class="card feature-card reveal">
-            <h3>Enterprise Insights</h3>
-            <p class="muted">Governance and observability stay aligned with risk signals, channel health, and audit trails.</p>
+            <h3>Governance primitives</h3>
+            <p class="muted">Studying policy guardrails, versioning, and audit trails as building blocks for governance.</p>
             <div class="mock">
               <svg viewBox="0 0 320 120" aria-hidden="true">
                 <rect x="10" y="18" width="120" height="70" rx="10" fill="rgba(255,255,255,0.07)" />
@@ -978,8 +822,8 @@
             </div>
           </article>
           <article class="card feature-card reveal">
-            <h3>Business Data Solutions</h3>
-            <p class="muted">Connectors and automation pipelines deliver clean, versioned workflows to every system.</p>
+            <h3>Observability threads</h3>
+            <p class="muted">Investigating how health signals and automation traces could connect across connectors.</p>
             <div class="mock">
               <svg viewBox="0 0 320 120" aria-hidden="true">
                 <rect x="10" y="20" width="300" height="10" rx="5" fill="rgba(255,255,255,0.08)" />
@@ -995,34 +839,34 @@
     <section class="section" id="use-cases">
       <div class="container">
         <div class="section-header reveal">
-          <span class="eyebrow">Use Cases</span>
-          <h2>Use cases built for orchestration teams</h2>
-          <p class="muted">Launch new channels, reduce drift, and enforce governance without slowing delivery.</p>
+          <span class="eyebrow">Use case sketches</span>
+          <h2>Scenarios we are learning from</h2>
+          <p class="muted">Listening to teams who orchestrate channels today to understand constraints and signals.</p>
         </div>
         <div class="use-cases-grid">
           <article class="card reveal">
             <h3>GTM Orchestration</h3>
-            <p class="muted">Coordinate product, marketing, and success channels with shared automation and clear ownership.</p>
+            <p class="muted">Learning how product, marketing, and success channels coordinate today.</p>
           </article>
           <article class="card reveal">
             <h3>API Platforms</h3>
-            <p class="muted">Standardize connectors, governance, and observability across internal and external APIs.</p>
+            <p class="muted">Studying how connectors, governance, and observability show up across internal and external APIs.</p>
           </article>
           <article class="card reveal">
             <h3>Ops and SRE</h3>
-            <p class="muted">Route incidents through the channel graph with versioned workflows and audit trails.</p>
+            <p class="muted">Exploring how incidents flow across channels and automation.</p>
           </article>
           <article class="card reveal">
             <h3>Enterprise Governance</h3>
-            <p class="muted">Apply policy guardrails and automation controls for every channel at scale.</p>
+            <p class="muted">Mapping policy guardrails and automation controls that matter at scale.</p>
           </article>
           <article class="card reveal">
-            <h3>Revenue Operations</h3>
-            <p class="muted">Align lifecycle touchpoints across sales, support, and customer data connectors.</p>
+            <h3>Lifecycle Operations</h3>
+            <p class="muted">Observing lifecycle touchpoints across support, success, and customer data connectors.</p>
           </article>
           <article class="card reveal">
             <h3>Platform Teams</h3>
-            <p class="muted">Deliver a single orchestration layer for teams building new channels and integrations.</p>
+            <p class="muted">Understanding how platform teams standardize orchestration for new channels and integrations.</p>
           </article>
         </div>
       </div>
@@ -1031,9 +875,9 @@
     <section class="section">
       <div class="container">
         <div class="section-header reveal">
-          <span class="eyebrow">Teams at home</span>
-          <h2>Built for teams across the channel stack</h2>
-          <p class="muted">From early stage builders to enterprise platforms, ChannelFrame adapts to any channel strategy.</p>
+          <span class="eyebrow">Listening post</span>
+          <h2>Input from teams across the channel stack</h2>
+          <p class="muted">Early conversations span SaaS, APIs, ops, platforms, and cross-functional teams.</p>
         </div>
         <div class="pill-row reveal">
           <span class="pill">SaaS</span>
@@ -1047,9 +891,9 @@
     <section class="section">
       <div class="container">
         <div class="section-header reveal">
-          <span class="eyebrow">Benefits</span>
-          <h2>Benefits that scale with every channel</h2>
-          <p class="muted">Move faster while keeping governance, observability, and automation in sync.</p>
+          <span class="eyebrow">Exploration hypotheses</span>
+          <h2>Hypotheses we are testing</h2>
+          <p class="muted">Early signals around orchestration, governance, observability, connectors, and automation.</p>
         </div>
         <div class="benefits-grid">
           <div class="benefit-item reveal">
@@ -1058,7 +902,7 @@
             </svg>
             <div>
               <h3>Instant orchestration</h3>
-              <p class="muted2">Move from idea to channel flow in hours with reusable automation.</p>
+              <p class="muted2">Hypothesis: instant orchestration reduces coordination drift across channels.</p>
             </div>
           </div>
           <div class="benefit-item reveal">
@@ -1067,7 +911,7 @@
             </svg>
             <div>
               <h3>Policy guardrails</h3>
-              <p class="muted2">Embed governance so every channel honors compliance and trust.</p>
+              <p class="muted2">Hypothesis: policy guardrails can scale governance without slowing teams.</p>
             </div>
           </div>
           <div class="benefit-item reveal">
@@ -1076,7 +920,7 @@
             </svg>
             <div>
               <h3>Observability</h3>
-              <p class="muted2">Track channel health, drift, and impact in real time.</p>
+              <p class="muted2">Exploring which channel health signals matter most for orchestration.</p>
             </div>
           </div>
           <div class="benefit-item reveal">
@@ -1085,7 +929,7 @@
             </svg>
             <div>
               <h3>Connectors</h3>
-              <p class="muted2">Plug in every system with standardized connectors and API governance.</p>
+              <p class="muted2">Researching how connectors can stay stable as automation evolves.</p>
             </div>
           </div>
           <div class="benefit-item reveal">
@@ -1094,7 +938,7 @@
             </svg>
             <div>
               <h3>Versioned workflows</h3>
-              <p class="muted2">Ship automation with confidence using rollback-ready versions.</p>
+              <p class="muted2">Testing whether versioned workflows help teams iterate safely.</p>
             </div>
           </div>
           <div class="benefit-item reveal">
@@ -1103,7 +947,7 @@
             </svg>
             <div>
               <h3>Audit trails</h3>
-              <p class="muted2">Maintain a full history of orchestration changes across channels.</p>
+              <p class="muted2">Defining audit trails that remain meaningful across channels.</p>
             </div>
           </div>
         </div>
@@ -1113,187 +957,37 @@
     <section class="section">
       <div class="container">
         <div class="section-header reveal">
-          <span class="eyebrow">WALL OF LOVE</span>
-          <h2>Loved by builders</h2>
-          <p class="muted">Real teams shipping faster with channel graphs, governance, and observability.</p>
-        </div>
-        <div class="testimonials-grid">
-          <article class="card testimonial-card reveal">
-            <div class="stars" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-            </div>
-            <p class="muted">"ChannelFrame turned our channel chaos into a living graph. The governance layer finally sticks."</p>
-            <p><strong>Maya K.</strong> - Head of Platform, Orbitly</p>
-          </article>
-          <article class="card testimonial-card reveal">
-            <div class="stars" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-            </div>
-            <p class="muted">"We shipped connectors three times faster and the audit trails answered every compliance review."</p>
-            <p><strong>Jae R.</strong> - Director of Ops, Northgate</p>
-          </article>
-          <article class="card testimonial-card reveal">
-            <div class="stars" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-            </div>
-            <p class="muted">"Observability across comms, data, and automation in one view is a game changer."</p>
-            <p><strong>Anya L.</strong> - VP Engineering, Helio</p>
-          </article>
-          <article class="card testimonial-card reveal">
-            <div class="stars" aria-hidden="true">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
-            </div>
-            <p class="muted">"From onboarding to renewal, every channel is orchestrated and measurable."</p>
-            <p><strong>Luis M.</strong> - Product Lead, Stacklane</p>
-          </article>
-        </div>
-      </div>
-    </section>
-    <section class="section">
-      <div class="container">
-        <div class="section-header reveal">
-          <span class="eyebrow">Comparison</span>
-          <h2>Why ChannelFrame stands out</h2>
-          <p class="muted">The difference between channel chaos and a governed, observable framework.</p>
-        </div>
-        <div class="comparison-grid">
-          <article class="card comparison-card reveal">
-            <h3>ChannelFrame</h3>
-            <ul>
-              <li>Unified channel graph across every touchpoint</li>
-              <li>Governance and observability built in</li>
-              <li>Versioned automation with audit trails</li>
-              <li>Prebuilt connectors with policy controls</li>
-              <li>Automation that scales with every channel</li>
-            </ul>
-          </article>
-          <article class="card comparison-card other reveal">
-            <h3>Others</h3>
-            <ul>
-              <li>Channel sprawl across disconnected tools</li>
-              <li>Governance bolted on after the fact</li>
-              <li>Reactive observability without context</li>
-              <li>Manual connectors that drift</li>
-              <li>Automation trapped in silos</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-header reveal">
-          <span class="eyebrow">AI-Driven Efficiency</span>
-          <h2>AI-driven efficiency for orchestration teams</h2>
-          <p class="muted">ChannelFrame pairs automation with intelligence so you can prioritize the channels that matter most.</p>
+          <span class="eyebrow">Exploration lenses</span>
+          <h2>Exploration lenses for ChannelFrame</h2>
+          <p class="muted">We are mapping how integration, governance, and observability could reinforce one another before a product exists.</p>
         </div>
         <div class="ai-grid">
           <article class="card reveal">
-            <h3>Effortless Integration</h3>
-            <p class="muted">Bring new channels online with guided automation and a channel graph that learns from every connector.</p>
+            <h3>Integration signals</h3>
+            <p class="muted">Exploring how connectors and automation might create reliable signals across channels.</p>
             <div class="chip-row">
-              <span class="chip">Smart Analytics</span>
-              <span class="chip">Real-time Collaboration</span>
-              <span class="chip">Task Prioritization</span>
+              <span class="chip">Connector consistency</span>
+              <span class="chip">Automation cues</span>
+              <span class="chip">Signal sampling</span>
             </div>
           </article>
           <article class="card reveal">
-            <h3>Secure and Scalable</h3>
-            <p class="muted">Governance policies apply automatically as the graph grows across teams and regions.</p>
+            <h3>Secure foundations</h3>
+            <p class="muted">Studying governance guardrails, versioning, and audit context as core primitives.</p>
             <div class="chip-row">
-              <span class="chip">Policy Engine</span>
-              <span class="chip">Role-based Access</span>
-              <span class="chip">Audit Trails</span>
+              <span class="chip">Policy primitives</span>
+              <span class="chip">Role boundaries</span>
+              <span class="chip">Audit context</span>
             </div>
           </article>
           <article class="card reveal">
-            <h3>Actionable Insights</h3>
-            <p class="muted">Connect observability data to orchestration decisions for faster, safer automation.</p>
+            <h3>Actionable visibility</h3>
+            <p class="muted">Investigating which observability metrics inform safe orchestration decisions.</p>
             <div class="chip-row">
-              <span class="chip">Channel Drift Alerts</span>
-              <span class="chip">Impact Forecasting</span>
-              <span class="chip">Governance Scoring</span>
+              <span class="chip">Health baselines</span>
+              <span class="chip">Drift cues</span>
+              <span class="chip">Latency traces</span>
             </div>
-          </article>
-        </div>
-      </div>
-    </section>
-    <section class="section" id="pricing">
-      <div class="container">
-        <div class="section-header reveal">
-          <span class="eyebrow">Pricing</span>
-          <h2>Pricing that grows with you</h2>
-          <p class="muted">Start small, scale orchestration across every channel as you grow.</p>
-        </div>
-        <div class="pricing-toggle" role="group" aria-label="Billing cadence">
-          <button class="toggle-btn is-active" data-billing-toggle="monthly" aria-pressed="true">Monthly</button>
-          <button class="toggle-btn" data-billing-toggle="yearly" aria-pressed="false">Yearly</button>
-        </div>
-        <div class="pricing-grid">
-          <article class="card pricing-card reveal">
-            <h3>Starter</h3>
-            <p class="muted">For teams building their first channel graph.</p>
-            <div class="price-wrap">
-              <span class="price" data-price data-monthly="29" data-yearly="24">$29</span>
-              <span class="muted2" data-suffix>/mo</span>
-            </div>
-            <p class="muted2" data-billing data-monthly="Billed monthly" data-yearly="Billed annually">Billed monthly</p>
-            <ul>
-              <li>Up to 3 workspaces</li>
-              <li>5 connectors</li>
-              <li>Basic orchestration automation</li>
-              <li>Observability snapshots</li>
-              <li>Community support</li>
-            </ul>
-          </article>
-          <article class="card pricing-card highlight reveal">
-            <h3>Pro</h3>
-            <p class="muted">For scaling orchestration across every channel.</p>
-            <div class="price-wrap">
-              <span class="price" data-price data-monthly="79" data-yearly="64">$79</span>
-              <span class="muted2" data-suffix>/mo</span>
-            </div>
-            <p class="muted2" data-billing data-monthly="Billed monthly" data-yearly="Billed annually">Billed monthly</p>
-            <ul>
-              <li>Unlimited workspaces</li>
-              <li>Unlimited connectors</li>
-              <li>Policy guardrails</li>
-              <li>Versioned workflows</li>
-              <li>Advanced observability</li>
-            </ul>
-          </article>
-          <article class="card pricing-card reveal">
-            <h3>Enterprise</h3>
-            <p class="muted">For regulated teams with global governance needs.</p>
-            <div class="price-wrap">
-              <span class="price" data-price data-monthly="Custom" data-yearly="Custom">Custom</span>
-              <span class="muted2" data-suffix></span>
-            </div>
-            <p class="muted2" data-billing data-monthly="Custom billing" data-yearly="Custom billing">Custom billing</p>
-            <ul>
-              <li>Dedicated governance controls</li>
-              <li>Enterprise connectors and automation</li>
-              <li>Advanced audit trails</li>
-              <li>SSO and security reviews</li>
-              <li>Priority support</li>
-            </ul>
           </article>
         </div>
       </div>
@@ -1303,44 +997,38 @@
       <div class="container">
         <div class="section-header reveal">
           <span class="eyebrow">FAQ</span>
-          <h2>Answers for orchestration teams</h2>
-          <p class="muted">Clear guidance on how ChannelFrame keeps channels aligned.</p>
+          <h2>Questions about the exploration</h2>
+          <p class="muted">Short answers on where ChannelFrame is today.</p>
         </div>
         <div class="features-grid">
           <div class="faq-item reveal">
-            <button type="button" aria-expanded="false">What is a channel graph?<span>+</span></button>
+            <button type="button" aria-expanded="false">What is ChannelFrame today?<span>+</span></button>
             <div class="faq-panel" aria-hidden="true">
-              <p>A channel graph is the living map of every channel, connector, policy, and workflow. It keeps orchestration and governance aligned.</p>
+              <p>ChannelFrame is an early exploration of orchestrating channels, with no shipped product yet.</p>
             </div>
           </div>
           <div class="faq-item reveal">
-            <button type="button" aria-expanded="false">How does ChannelFrame handle governance?<span>+</span></button>
+            <button type="button" aria-expanded="false">What do you mean by a channel topology?<span>+</span></button>
             <div class="faq-panel" aria-hidden="true">
-              <p>Governance policies are applied directly to each channel and connector, with audit trails and versioned workflows.</p>
+              <p>It is a working concept for mapping channels, connectors, and governance relationships. The model is still evolving.</p>
             </div>
           </div>
           <div class="faq-item reveal">
-            <button type="button" aria-expanded="false">Can we bring our existing connectors?<span>+</span></button>
+            <button type="button" aria-expanded="false">How are governance and observability treated?<span>+</span></button>
             <div class="faq-panel" aria-hidden="true">
-              <p>Yes. ChannelFrame supports existing connectors and wraps them with observability and policy guardrails.</p>
+              <p>We are exploring policy guardrails, audit trails, and health signals as first-class primitives.</p>
             </div>
           </div>
           <div class="faq-item reveal">
-            <button type="button" aria-expanded="false">What does observability include?<span>+</span></button>
+            <button type="button" aria-expanded="false">Are connectors and automation part of the research?<span>+</span></button>
             <div class="faq-panel" aria-hidden="true">
-              <p>Observability includes health signals, latency, data drift, and automation status across every channel.</p>
+              <p>Yes. We are studying how connectors and versioned workflows can stay reliable across channels.</p>
             </div>
           </div>
           <div class="faq-item reveal">
-            <button type="button" aria-expanded="false">Is ChannelFrame ready for regulated teams?<span>+</span></button>
+            <button type="button" aria-expanded="false">How can teams contribute?<span>+</span></button>
             <div class="faq-panel" aria-hidden="true">
-              <p>Yes. Governance, audit trails, and role-based access are designed for regulated environments.</p>
-            </div>
-          </div>
-          <div class="faq-item reveal">
-            <button type="button" aria-expanded="false">How does pricing scale?<span>+</span></button>
-            <div class="faq-panel" aria-hidden="true">
-              <p>Pricing scales with connector count, orchestration volume, and governance requirements.</p>
+              <p>Share use cases, constraints, and channel pain points. We are collecting signals through early conversations.</p>
             </div>
           </div>
         </div>
@@ -1350,25 +1038,25 @@
       <div class="container">
         <div class="cta-panel reveal">
           <div class="section-header">
-            <span class="eyebrow">Final CTA</span>
-            <h2>Never miss an opportunity</h2>
-            <p class="muted">Move every channel in sync with a framework that keeps governance, observability, and automation aligned.</p>
+            <span class="eyebrow">Exploration</span>
+            <h2>Help shape the exploration</h2>
+            <p class="muted">ChannelFrame is early. We are collecting signals from teams working on orchestration, governance, observability, connectors, and automation.</p>
           </div>
           <div class="hero-actions">
-            <a class="btn primary" href="#pricing">Get Started</a>
-            <a class="btn secondary" href="#contact">Book a Demo</a>
+            <a class="btn primary" href="#features">Explore themes</a>
+            <a class="btn secondary" href="#footer">Get updates</a>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer>
+  <footer id="footer">
     <div class="container">
       <div class="footer-grid">
         <div>
           <h3>ChannelFrame</h3>
-          <p class="muted">Orchestration, governance, and observability for every channel, delivered through one channel graph.</p>
+          <p class="muted">An early exploration of orchestration, governance, observability, connectors, and automation across channels.</p>
           <form class="footer-form">
             <label class="sr-only" for="email">Email</label>
             <input id="email" type="email" name="email" placeholder="you@company.com" autocomplete="email">
@@ -1398,16 +1086,16 @@
         <div>
           <h3>Explore</h3>
           <div class="footer-links">
-            <a href="#pricing">Pricing</a>
-            <a href="#features">Features</a>
-            <a href="#use-cases">Blog</a>
-            <a href="#faq">Privacy</a>
+            <a href="#features">Themes</a>
+            <a href="#use-cases">Scenarios</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contact">Contact</a>
           </div>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 ChannelFrame</span>
-        <span>Built for orchestration, governance, and observability.</span>
+        <span>&copy; 2026 ChannelFrame</span>
+        <span>Early exploration of orchestration, governance, observability, connectors, and automation.</span>
       </div>
     </div>
   </footer>
@@ -1437,36 +1125,6 @@
           toggle.setAttribute("aria-expanded", "false");
         });
       });
-
-      const billingButtons = document.querySelectorAll("[data-billing-toggle]");
-      const priceNodes = document.querySelectorAll("[data-price]");
-      const billingNodes = document.querySelectorAll("[data-billing]");
-
-      const setBilling = (mode) => {
-        billingButtons.forEach((btn) => {
-          const active = btn.dataset.billingToggle === mode;
-          btn.classList.toggle("is-active", active);
-          btn.setAttribute("aria-pressed", String(active));
-        });
-
-        priceNodes.forEach((node) => {
-          const raw = node.dataset[mode];
-          node.textContent = raw === "Custom" ? "Custom" : `$${raw}`;
-          const suffix = node.closest(".price-wrap").querySelector("[data-suffix]");
-          if (suffix) {
-            suffix.textContent = raw === "Custom" ? "" : "/mo";
-          }
-        });
-
-        billingNodes.forEach((node) => {
-          node.textContent = node.dataset[mode];
-        });
-      };
-
-      billingButtons.forEach((btn) => {
-        btn.addEventListener("click", () => setBilling(btn.dataset.billingToggle));
-      });
-      setBilling("monthly");
 
       document.querySelectorAll(".faq-item").forEach((item) => {
         const button = item.querySelector("button");
