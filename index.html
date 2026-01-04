@@ -1,24 +1,1502 @@
+
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>ChannelFrame</title>
+  <title>ChannelFrame | Orchestrate every channel</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="ChannelFrame – The framework for orchestrating every channel.">
+  <meta name="description" content="ChannelFrame is the framework for orchestrating every channel with a unified channel graph, governance, observability, connectors, and automation.">
+  <meta name="theme-color" content="#07060b">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07060b;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.04);
+      --stroke: rgba(255,255,255,0.10);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.70);
+      --muted2: rgba(255,255,255,0.55);
+      --a1: #A057EE;
+      --a2: #47A5EC;
+      --a3: #F2201A;
+      --a4: #493BBC;
+      --radius: 18px;
+      --shadow: 0 24px 60px rgba(0,0,0,0.45);
+      --maxw: 1200px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100%;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    body::before {
+      background:
+        radial-gradient(700px 400px at 15% 5%, rgba(160,87,238,0.28), transparent 70%),
+        radial-gradient(700px 500px at 85% 15%, rgba(71,165,236,0.22), transparent 70%),
+        radial-gradient(600px 500px at 50% 85%, rgba(242,32,26,0.18), transparent 70%);
+    }
+
+    body::after {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 56px 56px;
+      opacity: 0.35;
+      z-index: -1;
+    }
+
+    img,
+    svg {
+      display: block;
+      max-width: 100%;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 12px;
+      padding: 10px 16px;
+      background: #fff;
+      color: #111;
+      border-radius: 999px;
+      z-index: 999;
+    }
+
+    .skip-link:focus {
+      left: 16px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    .container {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section {
+      padding: 72px 0;
+      position: relative;
+    }
+
+    .section-header {
+      max-width: 720px;
+      margin-bottom: 32px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(160,87,238,0.18);
+      border: 1px solid rgba(160,87,238,0.45);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .muted2 {
+      color: var(--muted2);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: "Space Grotesk", "Inter", sans-serif;
+      line-height: 1.1;
+    }
+
+    h1 {
+      font-size: clamp(2.6rem, 4vw, 4rem);
+      margin: 16px 0;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 3vw, 3rem);
+      margin-bottom: 12px;
+    }
+
+    h3 {
+      font-size: 1.35rem;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      font-weight: 600;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      backdrop-filter: blur(10px);
+    }
+
+    .btn.primary {
+      background: linear-gradient(120deg, var(--a1), var(--a2));
+      color: #0a0a0f;
+      border: none;
+      box-shadow: 0 16px 40px rgba(160,87,238,0.35);
+    }
+
+    .btn.primary::after {
+      content: "";
+      position: absolute;
+      inset: -8px;
+      background: radial-gradient(circle, rgba(242,32,26,0.35), rgba(160,87,238,0.0) 70%);
+      opacity: 0;
+      z-index: -1;
+      transition: opacity 0.2s ease;
+      border-radius: 999px;
+    }
+
+    .btn.primary:hover::after {
+      opacity: 1;
+    }
+
+    .btn.secondary {
+      background: transparent;
+    }
+
+    .btn.ghost {
+      background: var(--panel2);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.25);
+    }
+
+    .btn:focus-visible,
+    .nav-toggle:focus-visible,
+    input:focus-visible,
+    a:focus-visible {
+      outline: 2px solid rgba(71,165,236,0.8);
+      outline-offset: 2px;
+    }
+
+    .card {
+      background: linear-gradient(var(--panel), var(--panel)) padding-box,
+        linear-gradient(120deg, var(--a4), var(--a2)) border-box;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      padding: 24px;
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+    }
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      transition: background 0.2s ease, border 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .site-header.scrolled {
+      background: rgba(7,6,11,0.78);
+      border-bottom: 1px solid var(--stroke);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 0;
+    }
+
+    .logo {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-links {
+      display: none;
+      gap: 24px;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      display: none;
+    }
+
+    .nav-toggle {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--panel2);
+      border: 1px solid var(--stroke);
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 999px;
+      transition: transform 0.2s ease;
+    }
+
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      padding: 0 24px 24px;
+      background: rgba(7,6,11,0.92);
+      border-bottom: 1px solid var(--stroke);
+    }
+
+    .site-header[data-open="true"] .mobile-menu {
+      display: flex;
+    }
+
+    .hero {
+      padding-top: 120px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: -200px 0 auto;
+      height: 420px;
+      background: radial-gradient(500px 300px at 20% 20%, rgba(160,87,238,0.45), transparent 70%),
+        radial-gradient(500px 300px at 70% 40%, rgba(71,165,236,0.35), transparent 70%);
+      z-index: -1;
+      opacity: 0.9;
+    }
+
+    .hero-grid {
+      display: grid;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-sub strong {
+      display: inline-block;
+      font-weight: 600;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin: 24px 0;
+    }
+
+    .hero-proof {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      border: 2px solid #0c0b11;
+      margin-left: -10px;
+      background: linear-gradient(130deg, var(--a1), var(--a2));
+      box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    }
+
+    .avatar:first-child {
+      margin-left: 0;
+    }
+
+    .avatar.a2 {
+      background: linear-gradient(130deg, var(--a2), var(--a4));
+    }
+
+    .avatar.a3 {
+      background: linear-gradient(130deg, var(--a4), var(--a3));
+    }
+
+    .avatar.a4 {
+      background: linear-gradient(130deg, var(--a1), var(--a3));
+    }
+
+    .hero-visual .graph-card {
+      padding: 24px;
+      border-radius: var(--radius);
+      background: linear-gradient(var(--panel), var(--panel)) padding-box,
+        linear-gradient(120deg, var(--a4), var(--a2)) border-box;
+      border: 1px solid transparent;
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .graph-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% 0 -20%;
+      height: 200px;
+      background: radial-gradient(circle, rgba(160,87,238,0.25), transparent 70%);
+      opacity: 0.7;
+    }
+
+    .graph-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .graph-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(71,165,236,0.2);
+      border: 1px solid rgba(71,165,236,0.4);
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.75rem;
+    }
+
+    .graph-footer {
+      margin-top: 16px;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .graph-line {
+      stroke: url(#lineGradient);
+      stroke-width: 2.5;
+      fill: none;
+      opacity: 0.7;
+    }
+
+    .node {
+      fill: rgba(71,165,236,0.95);
+      filter: drop-shadow(0 0 8px rgba(71,165,236,0.7));
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    .node.alt {
+      fill: rgba(160,87,238,0.95);
+      filter: drop-shadow(0 0 10px rgba(160,87,238,0.7));
+      animation-delay: 1s;
+    }
+
+    .node.hot {
+      fill: rgba(242,32,26,0.95);
+      filter: drop-shadow(0 0 10px rgba(242,32,26,0.7));
+      animation-delay: 2s;
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+      50% {
+        transform: scale(1.15);
+        opacity: 1;
+      }
+    }
+    .features-grid,
+    .use-cases-grid,
+    .benefits-grid,
+    .testimonials-grid,
+    .comparison-grid,
+    .ai-grid,
+    .pricing-grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .feature-card .mock {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 14px;
+      background: rgba(7,6,11,0.5);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .pill {
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: var(--panel2);
+      border: 1px solid var(--stroke);
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .benefit-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .benefit-item svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .testimonial-card {
+      position: relative;
+    }
+
+    .stars {
+      display: inline-flex;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+
+    .comparison-card {
+      padding: 28px;
+    }
+
+    .comparison-card h3 {
+      margin-bottom: 12px;
+    }
+
+    .comparison-card ul {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+    }
+
+    .comparison-card ul li::before {
+      content: "+";
+      margin-right: 8px;
+      color: var(--a2);
+      font-weight: 700;
+    }
+
+    .comparison-card.other ul li::before {
+      content: "-";
+      color: var(--a3);
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .chip {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(71,165,236,0.16);
+      border: 1px solid rgba(71,165,236,0.35);
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .pricing-toggle {
+      display: inline-flex;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--stroke);
+      margin-bottom: 24px;
+    }
+
+    .toggle-btn {
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .toggle-btn.is-active {
+      background: linear-gradient(120deg, var(--a1), var(--a2));
+      color: #0a0a0f;
+    }
+
+    .pricing-card .price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin: 16px 0;
+    }
+
+    .pricing-card .price {
+      font-size: 2.4rem;
+      font-weight: 700;
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    .pricing-card ul {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+    }
+
+    .pricing-card ul li::before {
+      content: "\2713";
+      margin-right: 8px;
+      color: var(--a2);
+      font-weight: 700;
+    }
+
+    .pricing-card.highlight {
+      border: 1px solid rgba(160,87,238,0.6);
+      box-shadow: 0 30px 80px rgba(160,87,238,0.25);
+      position: relative;
+    }
+
+    .pricing-card.highlight::before {
+      content: "Most Popular";
+      position: absolute;
+      top: -14px;
+      right: 20px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(160,87,238,0.3);
+      border: 1px solid rgba(160,87,238,0.5);
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .faq-item {
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 16px 20px;
+    }
+
+    .faq-item button {
+      width: 100%;
+      text-align: left;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .faq-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      color: var(--muted);
+    }
+
+    .faq-item.open .faq-panel {
+      max-height: 400px;
+      margin-top: 12px;
+    }
+
+    .cta-panel {
+      padding: 40px;
+      border-radius: 24px;
+      background: linear-gradient(var(--panel), var(--panel)) padding-box,
+        linear-gradient(120deg, var(--a3), var(--a1)) border-box;
+      border: 1px solid transparent;
+      box-shadow: 0 30px 80px rgba(242,32,26,0.18);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-panel::after {
+      content: "";
+      position: absolute;
+      inset: -40% 10% auto;
+      height: 260px;
+      background: radial-gradient(circle, rgba(242,32,26,0.35), transparent 70%);
+      opacity: 0.8;
+      z-index: -1;
+    }
+
+    footer {
+      padding: 64px 0 32px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .footer-grid {
+      display: grid;
+      gap: 32px;
+    }
+
+    .footer-form {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    input[type="email"] {
+      flex: 1 1 220px;
+      padding: 12px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text);
+    }
+
+    input::placeholder {
+      color: var(--muted2);
+    }
+
+    .socials {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .socials a {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-links {
+      display: grid;
+      gap: 10px;
+      color: var(--muted);
+    }
+
+    .footer-bottom {
+      margin-top: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted2);
+      font-size: 0.9rem;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.reveal-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (min-width: 768px) {
+      .section {
+        padding: 96px 0;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1.1fr 0.9fr;
+      }
+
+      .features-grid,
+      .use-cases-grid,
+      .benefits-grid,
+      .testimonials-grid,
+      .ai-grid,
+      .pricing-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .comparison-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .footer-grid {
+        grid-template-columns: 1.5fr 1fr;
+        align-items: start;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .nav-links {
+        display: flex;
+      }
+
+      .nav-cta {
+        display: block;
+      }
+
+      .nav-toggle {
+        display: none;
+      }
+
+      .mobile-menu {
+        display: none !important;
+      }
+
+      .features-grid,
+      .use-cases-grid,
+      .benefits-grid,
+      .testimonials-grid,
+      .ai-grid,
+      .pricing-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .section-header {
+        margin-bottom: 44px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
-<body style="font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif; max-width: 720px; margin: 80px auto; padding: 0 20px; color:#111;">
-  <h1>ChannelFrame</h1>
-  <p><em>The framework for orchestrating every channel.</em></p>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-  <p>
-    Modern systems operate across countless channels — communication, data, APIs, workflows.
-    ChannelFrame explores how these channels can be structured and aligned within a single coherent frame.
-  </p>
+  <header class="site-header" data-open="false">
+    <div class="container nav-inner">
+      <a class="logo" href="#top">ChannelFrame</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#use-cases">Use Cases</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="nav-cta">
+        <a class="btn ghost" href="#pricing">Get Started</a>
+      </div>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span class="sr-only">Toggle navigation</span>
+      </button>
+    </div>
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="#features">Features</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#use-cases">Use Cases</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contact</a>
+      <a class="btn primary" href="#pricing">Get Started</a>
+    </div>
+  </header>
 
-  <p><strong>Status:</strong> Early exploration.</p>
+  <main id="main">
+    <section class="hero section" id="top">
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <span class="eyebrow">Early exploration</span>
+          <h1>Orchestrate every channel</h1>
+          <p class="hero-sub">
+            <strong>The framework for orchestrating every channel.</strong>
+            Modern systems operate across countless channels - communication, data, APIs, workflows.
+            ChannelFrame explores how these channels can be structured and aligned within a single coherent frame.
+          </p>
+          <p class="hero-sub muted">
+            Unify governance, observability, connectors, and automation inside one channel graph so every team moves together.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#pricing">Get Started</a>
+            <a class="btn secondary" href="#contact">Book a Demo</a>
+          </div>
+          <div class="hero-proof">
+            <div class="avatar-stack" aria-hidden="true">
+              <span class="avatar"></span>
+              <span class="avatar a2"></span>
+              <span class="avatar a3"></span>
+              <span class="avatar a4"></span>
+            </div>
+            <span>Join 10,000+ builders orchestrating channels in weeks, not quarters.</span>
+          </div>
+        </div>
+        <div class="hero-visual reveal">
+          <div class="graph-card">
+            <div class="graph-header">
+              <span class="graph-title">Channel Graph</span>
+              <span class="graph-pill">Live</span>
+            </div>
+            <svg viewBox="0 0 420 260" aria-hidden="true">
+              <defs>
+                <linearGradient id="lineGradient" x1="0" x2="1" y1="0" y2="1">
+                  <stop offset="0%" stop-color="#A057EE" />
+                  <stop offset="100%" stop-color="#47A5EC" />
+                </linearGradient>
+              </defs>
+              <path class="graph-line" d="M40 40 C120 30, 140 140, 220 130" />
+              <path class="graph-line" d="M220 130 C270 120, 320 190, 380 170" />
+              <path class="graph-line" d="M100 200 C170 170, 210 200, 280 220" />
+              <circle class="node" cx="40" cy="40" r="8" />
+              <circle class="node alt" cx="220" cy="130" r="10" />
+              <circle class="node" cx="380" cy="170" r="7" />
+              <circle class="node hot" cx="100" cy="200" r="9" />
+              <circle class="node alt" cx="280" cy="220" r="8" />
+              <circle class="node" cx="160" cy="80" r="6" />
+              <circle class="node hot" cx="300" cy="70" r="7" />
+            </svg>
+            <div class="graph-footer">Governance and observability synced across 18 channels.</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <footer style="margin-top:60px; color:#666;">
-    © 2026 ChannelFrame
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Feature Highlights</span>
+          <h2>ChannelFrame highlights the work that matters</h2>
+          <p class="muted">Everything you need to orchestrate channels with clarity, governance, and automation from day one.</p>
+        </div>
+        <div class="features-grid">
+          <article class="card feature-card reveal">
+            <h3>Channel Graph</h3>
+            <p class="muted">Map every touchpoint, dependency, and policy into a living channel graph that updates in real time.</p>
+            <div class="mock">
+              <svg viewBox="0 0 320 120" aria-hidden="true">
+                <rect x="10" y="18" width="90" height="18" rx="6" fill="rgba(71,165,236,0.35)" />
+                <rect x="120" y="18" width="190" height="18" rx="6" fill="rgba(255,255,255,0.08)" />
+                <rect x="10" y="50" width="150" height="12" rx="6" fill="rgba(160,87,238,0.35)" />
+                <rect x="10" y="72" width="200" height="12" rx="6" fill="rgba(255,255,255,0.08)" />
+                <circle cx="285" cy="80" r="20" fill="rgba(71,165,236,0.2)" />
+              </svg>
+            </div>
+          </article>
+          <article class="card feature-card reveal">
+            <h3>Enterprise Insights</h3>
+            <p class="muted">Governance and observability stay aligned with risk signals, channel health, and audit trails.</p>
+            <div class="mock">
+              <svg viewBox="0 0 320 120" aria-hidden="true">
+                <rect x="10" y="18" width="120" height="70" rx="10" fill="rgba(255,255,255,0.07)" />
+                <rect x="150" y="18" width="150" height="12" rx="6" fill="rgba(160,87,238,0.35)" />
+                <rect x="150" y="40" width="120" height="12" rx="6" fill="rgba(255,255,255,0.08)" />
+                <rect x="150" y="62" width="100" height="12" rx="6" fill="rgba(71,165,236,0.35)" />
+              </svg>
+            </div>
+          </article>
+          <article class="card feature-card reveal">
+            <h3>Business Data Solutions</h3>
+            <p class="muted">Connectors and automation pipelines deliver clean, versioned workflows to every system.</p>
+            <div class="mock">
+              <svg viewBox="0 0 320 120" aria-hidden="true">
+                <rect x="10" y="20" width="300" height="10" rx="5" fill="rgba(255,255,255,0.08)" />
+                <rect x="10" y="44" width="220" height="10" rx="5" fill="rgba(160,87,238,0.35)" />
+                <rect x="10" y="68" width="260" height="10" rx="5" fill="rgba(71,165,236,0.35)" />
+                <rect x="10" y="92" width="180" height="10" rx="5" fill="rgba(255,255,255,0.08)" />
+              </svg>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="use-cases">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Use Cases</span>
+          <h2>Use cases built for orchestration teams</h2>
+          <p class="muted">Launch new channels, reduce drift, and enforce governance without slowing delivery.</p>
+        </div>
+        <div class="use-cases-grid">
+          <article class="card reveal">
+            <h3>GTM Orchestration</h3>
+            <p class="muted">Coordinate product, marketing, and success channels with shared automation and clear ownership.</p>
+          </article>
+          <article class="card reveal">
+            <h3>API Platforms</h3>
+            <p class="muted">Standardize connectors, governance, and observability across internal and external APIs.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Ops and SRE</h3>
+            <p class="muted">Route incidents through the channel graph with versioned workflows and audit trails.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Enterprise Governance</h3>
+            <p class="muted">Apply policy guardrails and automation controls for every channel at scale.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Revenue Operations</h3>
+            <p class="muted">Align lifecycle touchpoints across sales, support, and customer data connectors.</p>
+          </article>
+          <article class="card reveal">
+            <h3>Platform Teams</h3>
+            <p class="muted">Deliver a single orchestration layer for teams building new channels and integrations.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Teams at home</span>
+          <h2>Built for teams across the channel stack</h2>
+          <p class="muted">From early stage builders to enterprise platforms, ChannelFrame adapts to any channel strategy.</p>
+        </div>
+        <div class="pill-row reveal">
+          <span class="pill">SaaS</span>
+          <span class="pill">APIs</span>
+          <span class="pill">Ops</span>
+          <span class="pill">Platforms</span>
+          <span class="pill">Teams</span>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Benefits</span>
+          <h2>Benefits that scale with every channel</h2>
+          <p class="muted">Move faster while keeping governance, observability, and automation in sync.</p>
+        </div>
+        <div class="benefits-grid">
+          <div class="benefit-item reveal">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#47A5EC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <div>
+              <h3>Instant orchestration</h3>
+              <p class="muted2">Move from idea to channel flow in hours with reusable automation.</p>
+            </div>
+          </div>
+          <div class="benefit-item reveal">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#47A5EC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <div>
+              <h3>Policy guardrails</h3>
+              <p class="muted2">Embed governance so every channel honors compliance and trust.</p>
+            </div>
+          </div>
+          <div class="benefit-item reveal">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#47A5EC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <div>
+              <h3>Observability</h3>
+              <p class="muted2">Track channel health, drift, and impact in real time.</p>
+            </div>
+          </div>
+          <div class="benefit-item reveal">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#47A5EC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <div>
+              <h3>Connectors</h3>
+              <p class="muted2">Plug in every system with standardized connectors and API governance.</p>
+            </div>
+          </div>
+          <div class="benefit-item reveal">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#47A5EC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <div>
+              <h3>Versioned workflows</h3>
+              <p class="muted2">Ship automation with confidence using rollback-ready versions.</p>
+            </div>
+          </div>
+          <div class="benefit-item reveal">
+            <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#47A5EC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <div>
+              <h3>Audit trails</h3>
+              <p class="muted2">Maintain a full history of orchestration changes across channels.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">WALL OF LOVE</span>
+          <h2>Loved by builders</h2>
+          <p class="muted">Real teams shipping faster with channel graphs, governance, and observability.</p>
+        </div>
+        <div class="testimonials-grid">
+          <article class="card testimonial-card reveal">
+            <div class="stars" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+            </div>
+            <p class="muted">"ChannelFrame turned our channel chaos into a living graph. The governance layer finally sticks."</p>
+            <p><strong>Maya K.</strong> - Head of Platform, Orbitly</p>
+          </article>
+          <article class="card testimonial-card reveal">
+            <div class="stars" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+            </div>
+            <p class="muted">"We shipped connectors three times faster and the audit trails answered every compliance review."</p>
+            <p><strong>Jae R.</strong> - Director of Ops, Northgate</p>
+          </article>
+          <article class="card testimonial-card reveal">
+            <div class="stars" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+            </div>
+            <p class="muted">"Observability across comms, data, and automation in one view is a game changer."</p>
+            <p><strong>Anya L.</strong> - VP Engineering, Helio</p>
+          </article>
+          <article class="card testimonial-card reveal">
+            <div class="stars" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#F4C430"><polygon points="12 2 15 9 22 9 17 14 19 22 12 17 5 22 7 14 2 9 9 9" /></svg>
+            </div>
+            <p class="muted">"From onboarding to renewal, every channel is orchestrated and measurable."</p>
+            <p><strong>Luis M.</strong> - Product Lead, Stacklane</p>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Comparison</span>
+          <h2>Why ChannelFrame stands out</h2>
+          <p class="muted">The difference between channel chaos and a governed, observable framework.</p>
+        </div>
+        <div class="comparison-grid">
+          <article class="card comparison-card reveal">
+            <h3>ChannelFrame</h3>
+            <ul>
+              <li>Unified channel graph across every touchpoint</li>
+              <li>Governance and observability built in</li>
+              <li>Versioned automation with audit trails</li>
+              <li>Prebuilt connectors with policy controls</li>
+              <li>Automation that scales with every channel</li>
+            </ul>
+          </article>
+          <article class="card comparison-card other reveal">
+            <h3>Others</h3>
+            <ul>
+              <li>Channel sprawl across disconnected tools</li>
+              <li>Governance bolted on after the fact</li>
+              <li>Reactive observability without context</li>
+              <li>Manual connectors that drift</li>
+              <li>Automation trapped in silos</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">AI-Driven Efficiency</span>
+          <h2>AI-driven efficiency for orchestration teams</h2>
+          <p class="muted">ChannelFrame pairs automation with intelligence so you can prioritize the channels that matter most.</p>
+        </div>
+        <div class="ai-grid">
+          <article class="card reveal">
+            <h3>Effortless Integration</h3>
+            <p class="muted">Bring new channels online with guided automation and a channel graph that learns from every connector.</p>
+            <div class="chip-row">
+              <span class="chip">Smart Analytics</span>
+              <span class="chip">Real-time Collaboration</span>
+              <span class="chip">Task Prioritization</span>
+            </div>
+          </article>
+          <article class="card reveal">
+            <h3>Secure and Scalable</h3>
+            <p class="muted">Governance policies apply automatically as the graph grows across teams and regions.</p>
+            <div class="chip-row">
+              <span class="chip">Policy Engine</span>
+              <span class="chip">Role-based Access</span>
+              <span class="chip">Audit Trails</span>
+            </div>
+          </article>
+          <article class="card reveal">
+            <h3>Actionable Insights</h3>
+            <p class="muted">Connect observability data to orchestration decisions for faster, safer automation.</p>
+            <div class="chip-row">
+              <span class="chip">Channel Drift Alerts</span>
+              <span class="chip">Impact Forecasting</span>
+              <span class="chip">Governance Scoring</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="pricing">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">Pricing</span>
+          <h2>Pricing that grows with you</h2>
+          <p class="muted">Start small, scale orchestration across every channel as you grow.</p>
+        </div>
+        <div class="pricing-toggle" role="group" aria-label="Billing cadence">
+          <button class="toggle-btn is-active" data-billing-toggle="monthly" aria-pressed="true">Monthly</button>
+          <button class="toggle-btn" data-billing-toggle="yearly" aria-pressed="false">Yearly</button>
+        </div>
+        <div class="pricing-grid">
+          <article class="card pricing-card reveal">
+            <h3>Starter</h3>
+            <p class="muted">For teams building their first channel graph.</p>
+            <div class="price-wrap">
+              <span class="price" data-price data-monthly="29" data-yearly="24">$29</span>
+              <span class="muted2" data-suffix>/mo</span>
+            </div>
+            <p class="muted2" data-billing data-monthly="Billed monthly" data-yearly="Billed annually">Billed monthly</p>
+            <ul>
+              <li>Up to 3 workspaces</li>
+              <li>5 connectors</li>
+              <li>Basic orchestration automation</li>
+              <li>Observability snapshots</li>
+              <li>Community support</li>
+            </ul>
+          </article>
+          <article class="card pricing-card highlight reveal">
+            <h3>Pro</h3>
+            <p class="muted">For scaling orchestration across every channel.</p>
+            <div class="price-wrap">
+              <span class="price" data-price data-monthly="79" data-yearly="64">$79</span>
+              <span class="muted2" data-suffix>/mo</span>
+            </div>
+            <p class="muted2" data-billing data-monthly="Billed monthly" data-yearly="Billed annually">Billed monthly</p>
+            <ul>
+              <li>Unlimited workspaces</li>
+              <li>Unlimited connectors</li>
+              <li>Policy guardrails</li>
+              <li>Versioned workflows</li>
+              <li>Advanced observability</li>
+            </ul>
+          </article>
+          <article class="card pricing-card reveal">
+            <h3>Enterprise</h3>
+            <p class="muted">For regulated teams with global governance needs.</p>
+            <div class="price-wrap">
+              <span class="price" data-price data-monthly="Custom" data-yearly="Custom">Custom</span>
+              <span class="muted2" data-suffix></span>
+            </div>
+            <p class="muted2" data-billing data-monthly="Custom billing" data-yearly="Custom billing">Custom billing</p>
+            <ul>
+              <li>Dedicated governance controls</li>
+              <li>Enterprise connectors and automation</li>
+              <li>Advanced audit trails</li>
+              <li>SSO and security reviews</li>
+              <li>Priority support</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-header reveal">
+          <span class="eyebrow">FAQ</span>
+          <h2>Answers for orchestration teams</h2>
+          <p class="muted">Clear guidance on how ChannelFrame keeps channels aligned.</p>
+        </div>
+        <div class="features-grid">
+          <div class="faq-item reveal">
+            <button type="button" aria-expanded="false">What is a channel graph?<span>+</span></button>
+            <div class="faq-panel" aria-hidden="true">
+              <p>A channel graph is the living map of every channel, connector, policy, and workflow. It keeps orchestration and governance aligned.</p>
+            </div>
+          </div>
+          <div class="faq-item reveal">
+            <button type="button" aria-expanded="false">How does ChannelFrame handle governance?<span>+</span></button>
+            <div class="faq-panel" aria-hidden="true">
+              <p>Governance policies are applied directly to each channel and connector, with audit trails and versioned workflows.</p>
+            </div>
+          </div>
+          <div class="faq-item reveal">
+            <button type="button" aria-expanded="false">Can we bring our existing connectors?<span>+</span></button>
+            <div class="faq-panel" aria-hidden="true">
+              <p>Yes. ChannelFrame supports existing connectors and wraps them with observability and policy guardrails.</p>
+            </div>
+          </div>
+          <div class="faq-item reveal">
+            <button type="button" aria-expanded="false">What does observability include?<span>+</span></button>
+            <div class="faq-panel" aria-hidden="true">
+              <p>Observability includes health signals, latency, data drift, and automation status across every channel.</p>
+            </div>
+          </div>
+          <div class="faq-item reveal">
+            <button type="button" aria-expanded="false">Is ChannelFrame ready for regulated teams?<span>+</span></button>
+            <div class="faq-panel" aria-hidden="true">
+              <p>Yes. Governance, audit trails, and role-based access are designed for regulated environments.</p>
+            </div>
+          </div>
+          <div class="faq-item reveal">
+            <button type="button" aria-expanded="false">How does pricing scale?<span>+</span></button>
+            <div class="faq-panel" aria-hidden="true">
+              <p>Pricing scales with connector count, orchestration volume, and governance requirements.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="section" id="contact">
+      <div class="container">
+        <div class="cta-panel reveal">
+          <div class="section-header">
+            <span class="eyebrow">Final CTA</span>
+            <h2>Never miss an opportunity</h2>
+            <p class="muted">Move every channel in sync with a framework that keeps governance, observability, and automation aligned.</p>
+          </div>
+          <div class="hero-actions">
+            <a class="btn primary" href="#pricing">Get Started</a>
+            <a class="btn secondary" href="#contact">Book a Demo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3>ChannelFrame</h3>
+          <p class="muted">Orchestration, governance, and observability for every channel, delivered through one channel graph.</p>
+          <form class="footer-form">
+            <label class="sr-only" for="email">Email</label>
+            <input id="email" type="email" name="email" placeholder="you@company.com" autocomplete="email">
+            <button class="btn primary" type="button">Stay in the loop</button>
+          </form>
+          <div class="socials">
+            <a href="#top" aria-label="ChannelFrame on X">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 4l16 16" />
+                <path d="M20 4L4 20" />
+              </svg>
+            </a>
+            <a href="#top" aria-label="ChannelFrame on LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                <rect x="2" y="9" width="4" height="12" />
+                <circle cx="4" cy="4" r="2" />
+              </svg>
+            </a>
+            <a href="#top" aria-label="ChannelFrame on GitHub">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 19c-4 1.5-4-2.5-6-3m12 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 18 4.77 5.07 5.07 0 0 0 17.91 1S16.73.65 14 2.48a13.38 13.38 0 0 0-7 0C4.27.65 3.09 1 3.09 1A5.07 5.07 0 0 0 3 4.77 5.44 5.44 0 0 0 1.5 8c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 7 17.13V21" />
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h3>Explore</h3>
+          <div class="footer-links">
+            <a href="#pricing">Pricing</a>
+            <a href="#features">Features</a>
+            <a href="#use-cases">Blog</a>
+            <a href="#faq">Privacy</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>� 2026 ChannelFrame</span>
+        <span>Built for orchestration, governance, and observability.</span>
+      </div>
+    </div>
   </footer>
+
+  <script>
+    (() => {
+      const header = document.querySelector(".site-header");
+      const toggle = document.querySelector(".nav-toggle");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const onScroll = () => {
+        header.classList.toggle("scrolled", window.scrollY > 8);
+      };
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      toggle.addEventListener("click", () => {
+        const isOpen = toggle.getAttribute("aria-expanded") === "true";
+        toggle.setAttribute("aria-expanded", String(!isOpen));
+        header.dataset.open = String(!isOpen);
+      });
+
+      mobileMenu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          header.dataset.open = "false";
+          toggle.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      const billingButtons = document.querySelectorAll("[data-billing-toggle]");
+      const priceNodes = document.querySelectorAll("[data-price]");
+      const billingNodes = document.querySelectorAll("[data-billing]");
+
+      const setBilling = (mode) => {
+        billingButtons.forEach((btn) => {
+          const active = btn.dataset.billingToggle === mode;
+          btn.classList.toggle("is-active", active);
+          btn.setAttribute("aria-pressed", String(active));
+        });
+
+        priceNodes.forEach((node) => {
+          const raw = node.dataset[mode];
+          node.textContent = raw === "Custom" ? "Custom" : `$${raw}`;
+          const suffix = node.closest(".price-wrap").querySelector("[data-suffix]");
+          if (suffix) {
+            suffix.textContent = raw === "Custom" ? "" : "/mo";
+          }
+        });
+
+        billingNodes.forEach((node) => {
+          node.textContent = node.dataset[mode];
+        });
+      };
+
+      billingButtons.forEach((btn) => {
+        btn.addEventListener("click", () => setBilling(btn.dataset.billingToggle));
+      });
+      setBilling("monthly");
+
+      document.querySelectorAll(".faq-item").forEach((item) => {
+        const button = item.querySelector("button");
+        const panel = item.querySelector(".faq-panel");
+        button.addEventListener("click", () => {
+          const expanded = button.getAttribute("aria-expanded") === "true";
+          button.setAttribute("aria-expanded", String(!expanded));
+          item.classList.toggle("open", !expanded);
+          panel.setAttribute("aria-hidden", String(expanded));
+        });
+      });
+
+      const revealElements = document.querySelectorAll(".reveal");
+      if (!reduceMotion && "IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("reveal-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.2 }
+        );
+        revealElements.forEach((el) => observer.observe(el));
+      } else {
+        revealElements.forEach((el) => el.classList.add("reveal-visible"));
+      }
+    })();
+  </script>
 </body>
 </html>
